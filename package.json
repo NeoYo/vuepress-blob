@@ -1,0 +1,24 @@
+{
+  "name": "vuepress-blob",
+  "version": "0.1.0",
+  "description": "用 vuepress 搭建的 blob",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NeoYo/vuepress-blob.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NeoYo/vuepress-blob/issues"
+  },
+  "homepage": "https://github.com/NeoYo/vuepress-blob#readme",
+  "dependencies": {
+    "vuepress": "^1.2.0"
+  }
+}
