@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>this | My VuePress Blog</title>
+    <meta name="description" content="This is a NeoYo Blog">
+    
+    
+    <link rel="preload" href="/vuepress-blob/assets/css/0.styles.229ea746.css" as="style"><link rel="preload" href="/vuepress-blob/assets/js/app.df18ebf2.js" as="script"><link rel="preload" href="/vuepress-blob/assets/js/5.3d0458cd.js" as="script"><link rel="preload" href="/vuepress-blob/assets/js/3.214ace91.js" as="script"><link rel="preload" href="/vuepress-blob/assets/js/15.275a0086.js" as="script"><link rel="prefetch" href="/vuepress-blob/assets/js/10.61c46192.js"><link rel="prefetch" href="/vuepress-blob/assets/js/11.bc9954b6.js"><link rel="prefetch" href="/vuepress-blob/assets/js/12.abf0d591.js"><link rel="prefetch" href="/vuepress-blob/assets/js/13.44e04002.js"><link rel="prefetch" href="/vuepress-blob/assets/js/14.ec41e59b.js"><link rel="prefetch" href="/vuepress-blob/assets/js/16.af034801.js"><link rel="prefetch" href="/vuepress-blob/assets/js/17.554ffd8c.js"><link rel="prefetch" href="/vuepress-blob/assets/js/18.d9b8ed71.js"><link rel="prefetch" href="/vuepress-blob/assets/js/19.0a0c602d.js"><link rel="prefetch" href="/vuepress-blob/assets/js/4.5eeecc02.js"><link rel="prefetch" href="/vuepress-blob/assets/js/6.a212c24b.js"><link rel="prefetch" href="/vuepress-blob/assets/js/7.9b95adca.js"><link rel="prefetch" href="/vuepress-blob/assets/js/8.26c2bec8.js"><link rel="prefetch" href="/vuepress-blob/assets/js/9.f4e7a8d3.js"><link rel="prefetch" href="/vuepress-blob/assets/js/vuejs-paginate.d5e2be63.js">
+    <link rel="stylesheet" href="/vuepress-blob/assets/css/0.styles.229ea746.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div id="vuperess-theme-blog__global-layout"><section id="header-wrapper"><header id="header"><div class="header-wrapper"><div class="title"><a href="/vuepress-blob/vuepress-blob/" class="nav-link home-link">My VuePress Blog
+        </a></div> <div class="header-right-wrap"><ul class="nav"><li class="nav-item"><a href="/vuepress-blob/" class="nav-link">Blog</a></li><li class="nav-item"><a href="/vuepress-blob/tag/" class="nav-link">Tags</a></li></ul> <div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div></div></div></header> <div id="mobile-header"><div class="mobile-header-bar"><div class="mobile-header-title"><a href="/vuepress-blob/vuepress-blob/" class="nav-link mobile-home-link">My VuePress Blog
+      </a> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div> <div class="mobile-menu-wrapper"><hr class="menu-divider"> <ul class="mobile-nav"><li class="mobile-nav-item"><a href="/vuepress-blob/" class="nav-link">Blog</a></li><li class="mobile-nav-item"><a href="/vuepress-blob/tag/" class="nav-link">Tags</a></li></ul></div></div></div></section> <div class="content-wrapper"><div id="vuperess-theme-blog__post-layout"><div class="vuepress-blog-theme-content content__default"><h1 id="this"><a href="#this" aria-hidden="true" class="header-anchor">#</a> this</h1> <blockquote><p>为什么有了作用域，还要有 this</p></blockquote> <p>this 是在<strong>函数被调用</strong>时 “注入” 进函数作用域里的。this 相当于函数作用域内増持了一个变量 'this'，跟其他变量是并列关系。 它既不指向函数，不属于函数，又不指向函数的词法作用域就显而易见了。</p> <p>意义：在<strong>函数被调用</strong>时 “注入” 进函数作用域里，可以动态地传进方法里，不同于词法作用域。</p> <div class="language- extra-class"><pre class="language-text"><code>function foo() {
+	var a = 2; // 2. a 和 this 都被 foo 函数作用域持有
+	this.bar(); // 3. bar 调用时注入 foo 函数作用域的 this(window)
+}
+function bar() {
+	console.log('exec bar..');
+	// 4. window.a 并不存在
+	console.log('this.a:', this.a );
+}
+// 1. foo 调用时注入 this , 即 global对象, 在浏览器则是window
+foo(); 
+// 5. this 是 foo 函数作用域的一个属性, 不属于 foo
+console.log('foo.this: ', foo);
+</code></pre></div><p>既然 this 函数被调用时注入的，那么寻找 “函数被调用的位置” 就是我们的突破口，<code>debugger;</code> 或打断点是不错的选择。</p> <h2 id="_1-window-global"><a href="#_1-window-global" aria-hidden="true" class="header-anchor">#</a> 1. window/global</h2> <p>上面例子中 foo() 注入的 this，global对象, 在浏览器则是window。(strict 模式下则是 undefined)</p> <div class="language- extra-class"><pre class="language-text"><code>function foo() {
+    console.log( this.a );
+}
+var a = 1;
+foo(); // 1
+</code></pre></div><div class="language- extra-class"><pre class="language-text"><code>&quot;use strict&quot;
+function foo() {
+    console.log( this.a ); // TypeError: Cannot read property 'a' of undefined
+}
+var a = 1;
+foo();
+</code></pre></div><h2 id="_2-obj-func"><a href="#_2-obj-func" aria-hidden="true" class="header-anchor">#</a> 2. [obj].[func]</h2> <p>如果是 [obj].[func] 的形式，只绑定最后一层。存在 &quot;this 丢失&quot;</p> <h3 id="_2-1-obj-func"><a href="#_2-1-obj-func" aria-hidden="true" class="header-anchor">#</a> 2.1 [obj].[func]</h3> <div class="language- extra-class"><pre class="language-text"><code>// 非严格模式
+var name = 'window';
+function foo() {
+    console.log( this.name );
+}
+var obj = {
+    name: 'obj',
+    foo: foo,
+};
+foo(); // 'window'
+obj.foo(); // 'obj'
+</code></pre></div><h3 id="_2-2-只绑定最后一层"><a href="#_2-2-只绑定最后一层" aria-hidden="true" class="header-anchor">#</a> 2.2 只绑定最后一层</h3> <div class="language- extra-class"><pre class="language-text"><code>function foo() {
+    console.log( this.name );
+}
+var obj = {
+    name: 'obj',
+    foo: foo,
+};
+// 只绑定最后一层。
+var parent = {
+    name: 'parent',
+    obj,
+};
+parent.obj.foo(); // 'obj'
+</code></pre></div><h3 id="_2-3-this-丢失"><a href="#_2-3-this-丢失" aria-hidden="true" class="header-anchor">#</a> 2.3 this 丢失</h3> <div class="language- extra-class"><pre class="language-text"><code>// &quot;this&quot; 丢失
+function foo() {
+    console.log( this.name );
+}
+var obj = {
+    name: 'obj',
+    foo: foo,
+};
+var bar = obj.foo;
+var name = 'window';
+bar(); // 'window'
+</code></pre></div><h2 id="_3-call-apply"><a href="#_3-call-apply" aria-hidden="true" class="header-anchor">#</a> 3. call/apply</h2> <p><code>call/apply</code> 来源于 <code>Function.prototype.call / Function.prototype.apply</code>。 因为声明一个 function 相当于 new Function。</p> <p>[obj].[func] 相当于 call/apply 的语法糖</p> <div class="language- extra-class"><pre class="language-text"><code>// call 接受的是若干个参数的列表
+function foo() {
+    console.log( this.a );
+}
+var obj = {
+    a:2
+};
+foo.call( obj ); // 2
+
+// apply 接受一个包含多个参数的数组
+var numbers = [5, 6, 2, 3, 7];
+var max = Math.max.apply(null, numbers);
+console.log(max); // 7
+</code></pre></div><h2 id="_4-bind"><a href="#_4-bind" aria-hidden="true" class="header-anchor">#</a> 4. bind</h2> <h3 id="_4-1-强制绑定"><a href="#_4-1-强制绑定" aria-hidden="true" class="header-anchor">#</a> 4.1 强制绑定</h3> <p>由于[obj].[func] 存在 this 丢失，call/apply 又是立即执行的。无法强制绑定 this。</p> <p>强制绑定 this 有两种，一个是外层封住一个函数， 二是 ES5 提供的 bind 函数</p> <div class="language- extra-class"><pre class="language-text"><code>// 外层封住一个函数
+function foo(something) {
+    console.log( this.a, something );
+    return this.a + something;
+}
+var obj = {
+    a:2
+};
+var bar = function() {
+    return foo.apply( obj, arguments );
+};
+var b = bar( 3 ); // 2 3
+console.log( b ); // 5
+
+// 模拟 Function.prototype.bind
+function bind(fn, obj) {
+    return function() {
+        return fn.apply( obj, arguments );
+    };
+}
+</code></pre></div><h3 id="_4-2-bind"><a href="#_4-2-bind" aria-hidden="true" class="header-anchor">#</a> 4.2 bind</h3> <div class="language- extra-class"><pre class="language-text"><code>function foo(something) {
+    console.log( this.a, something );
+    return this.a + ' ' + something;
+}
+var obj = {
+    a: 'obj',
+    foo: foo
+};
+var bar = foo.bind( obj );
+console.log( bar('function') ); // obj function
+var test = obj.foo;
+console.log( test('function') );  // undefined function
+</code></pre></div><p>优先级 bind &gt; call/apply &gt; [obj].[func]</p> <div class="language- extra-class"><pre class="language-text"><code>const a = 1;
+function foo() {
+    console.log( this.a );
+}
+const obj = {
+    a: 2,
+    foo: foo,
+};
+const callOther = {
+    a: 'call',
+}
+const bindOther = {
+    a: 'bind',
+}
+// call/apply 优先级 比 [obj].[func] 高
+obj.foo.call(callOther);
+const func = foo.bind(bindOther);
+func(); // &quot;bind&quot;
+// bind 优先级 比 call/apply 高
+func.call(callOther); // &quot;bind&quot;
+</code></pre></div><p>bind 实际上是 call/apply 的语法糖</p> <h2 id="_5"><a href="#_5" aria-hidden="true" class="header-anchor">#</a> 5. () =&gt; {}</h2> <p>箭头函数的this是在定义函数时绑定的，不是在执行过程中绑定的。简单的说，函数在定义时，this就继承了定义函数的对象。</p> <ul><li>使用 ES6 箭头函数</li></ul> <p><img src="http://note.youdao.com/yws/res/11186/071AE52CA85E4271AF8D19E846021AC7" alt="image"></p> <ul><li>如果不用 ES6 的箭头函数</li></ul> <p><img src="http://note.youdao.com/yws/res/11188/8760D7097C834280895FB35C0A7590DE" alt="image"></p> <h2 id="_6-原型链-new"><a href="#_6-原型链-new" aria-hidden="true" class="header-anchor">#</a> 6. 原型链 - new</h2> <h2 id="_7-数组中-function-的-this"><a href="#_7-数组中-function-的-this" aria-hidden="true" class="header-anchor">#</a> 7. 数组中 function 的 this</h2> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">// 考察静态作用域 + this 默认是 window</span>
+<span class="token keyword">var</span> value <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+<span class="token keyword">function</span> <span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">function</span> <span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">var</span> value <span class="token operator">=</span> <span class="token number">100</span><span class="token punctuation">;</span>
+    <span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 100</span>
+
+<span class="token comment">// 数组中 function 的 this</span>
+<span class="token keyword">var</span> arr <span class="token operator">=</span> <span class="token punctuation">[</span>fn<span class="token punctuation">]</span><span class="token punctuation">;</span>
+arr<span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token number">1000</span><span class="token punctuation">;</span>
+arr<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 1000</span>
+</code></pre></div><ul><li>真题</li></ul> <div class="language- extra-class"><pre class="language-text"><code>var length = 10;
+function fn(){
+    console.log(this.length);
+}
+var obj = {
+    length: 5,
+    method: function (fn1) {
+        arguments[0]();     }
+};
+obj.method(fn, 123);
+</code></pre></div></div> <div class="sticker vuepress-toc"><div class="vuepress-toc-item vuepress-toc-h2 active"><a href="#_1-window-global" title="1. window/global">1. window/global</a></div><div class="vuepress-toc-item vuepress-toc-h2"><a href="#_2-obj-func" title="2. [obj].[func]">2. [obj].[func]</a></div><div class="vuepress-toc-item vuepress-toc-h3"><a href="#_2-1-obj-func" title="2.1 [obj].[func]">2.1 [obj].[func]</a></div><div class="vuepress-toc-item vuepress-toc-h3"><a href="#_2-2-只绑定最后一层" title="2.2 只绑定最后一层">2.2 只绑定最后一层</a></div><div class="vuepress-toc-item vuepress-toc-h3"><a href="#_2-3-this-丢失" title="2.3 this 丢失">2.3 this 丢失</a></div><div class="vuepress-toc-item vuepress-toc-h2"><a href="#_3-call-apply" title="3. call/apply">3. call/apply</a></div><div class="vuepress-toc-item vuepress-toc-h2"><a href="#_4-bind" title="4. bind">4. bind</a></div><div class="vuepress-toc-item vuepress-toc-h3"><a href="#_4-1-强制绑定" title="4.1 强制绑定">4.1 强制绑定</a></div><div class="vuepress-toc-item vuepress-toc-h3"><a href="#_4-2-bind" title="4.2 bind">4.2 bind</a></div><div class="vuepress-toc-item vuepress-toc-h2"><a href="#_5" title="5. () =&gt; {}">5. () =&gt; {}</a></div><div class="vuepress-toc-item vuepress-toc-h2"><a href="#_6-原型链-new" title="6. 原型链 - new">6. 原型链 - new</a></div><div class="vuepress-toc-item vuepress-toc-h2"><a href="#_7-数组中-function-的-this" title="7. 数组中 function 的 this">7. 数组中 function 的 this</a></div></div></div></div> <footer class="footer" data-v-0d113134><div class="footer-left-wrap" data-v-0d113134><ul class="contact" data-v-0d113134><li class="contact-item" data-v-0d113134><a href="https://github.com/NeoYo" target="_blank" rel="noopener noreferrer" class="nav-link external" data-v-0d113134><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github" data-v-0d113134><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" data-v-0d113134></path></svg>
+          
+        </a></li></ul></div> <div class="footer-right-wrap" data-v-0d113134><ul class="copyright" data-v-0d113134><li class="copyright-item" data-v-0d113134><a href="https://policies.google.com/privacy?hl=en-US" target="_blank" rel="noopener noreferrer" class="nav-link external" data-v-0d113134>Privacy Policy</a></li><li class="copyright-item" data-v-0d113134><a href="/vuepress-blob/2020/01/11/this/.html" class="nav-link" data-v-0d113134>MIT Licensed | Copyright © 2018-present Vue.js</a></li></ul></div></footer></div><div class="global-ui"></div></div>
+    <script src="/vuepress-blob/assets/js/app.df18ebf2.js" defer></script><script src="/vuepress-blob/assets/js/5.3d0458cd.js" defer></script><script src="/vuepress-blob/assets/js/3.214ace91.js" defer></script><script src="/vuepress-blob/assets/js/15.275a0086.js" defer></script>
+  </body>
+</html>
