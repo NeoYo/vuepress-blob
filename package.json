@@ -1,24 +1,19 @@
 {
   "name": "vuepress-blob",
-  "version": "0.1.0",
-  "description": "用 vuepress 搭建的 blob",
+  "version": "0.0.1",
+  "description": "我的个人博客",
   "main": "index.js",
+  "authors": {
+    "name": "NeoYo"
+  },
+  "repository": "/vuepress-blob",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "vuepress dev blob",
-    "build": "vuepress build blob"
+    "dev": "vuepress dev blog",
+    "build": "vuepress build blog"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/NeoYo/vuepress-blob.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/NeoYo/vuepress-blob/issues"
-  },
-  "homepage": "https://github.com/NeoYo/vuepress-blob#readme",
-  "dependencies": {
-    "vuepress": "^1.2.0"
+  "license": "MIT",
+  "devDependencies": {
+    "vuepress": "^1.0.0",
+    "@vuepress/theme-blog": "^1.0.0"
   }
 }
